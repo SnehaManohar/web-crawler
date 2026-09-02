@@ -1,0 +1,28 @@
+server:
+  port: 0
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:crawler-test;DB_CLOSE_DELAY=-1
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+crawler:
+  worker-count: 4
+  max-depth: 2
+  max-pages-per-job: 50
+  reconciliation-interval-millis: 500
+  fetch:
+    timeout-millis: 2000
+  retry:
+    max-attempts: 3
+    initial-backoff-millis: 20
+    multiplier: 2.0
+    max-backoff-millis: 100
+  rate-limit:
+    per-domain-min-interval-millis: 0
+
+logging:
+  level:
+    com.crawler: INFO

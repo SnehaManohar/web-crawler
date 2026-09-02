@@ -1,0 +1,46 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: web-crawler
+  datasource:
+    url: jdbc:h2:mem:crawler;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+
+crawler:
+  worker-count: 8                       # fixed thread pool that consumes the crawl-task queue
+  max-depth: 2                          # default link depth when a request omits maxDepth (seeds = depth 0)
+  max-pages-per-job: 200                # hard cap on unique pages per job
+  reconciliation-interval-millis: 2000  # how often orphaned RUNNING jobs are swept up
+
+  fetch:
+    timeout-millis: 10000
+    user-agent: "SimpleWebCrawler/0.1 (+https://example.invalid/bot)"
+    max-body-bytes: 5000000
+
+  retry:
+    max-attempts: 3                     # per-URL fetch attempts (1 = no retry)
+    initial-backoff-millis: 200
+    multiplier: 2.0
+    max-backoff-millis: 2000
+
+  rate-limit:
+    per-domain-min-interval-millis: 200 # minimum gap between two requests to the same host
+
+logging:
+  level:
+    com.crawler: INFO
